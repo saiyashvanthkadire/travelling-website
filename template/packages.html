@@ -590,6 +590,47 @@
       }
     }
 
+    .menu-toggle {
+      display: none;
+      width: 40px; height: 40px;
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.12);
+      color: #fff; cursor: pointer;
+      align-items: center; justify-content: center;
+      flex-direction: column; gap: 5px; flex-shrink: 0;
+    }
+    .menu-toggle span {
+      width: 20px; height: 2px; border-radius: 999px;
+      background: currentColor;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+    .menu-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .menu-toggle.open span:nth-child(2) { opacity: 0; }
+    .menu-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    @media (max-width: 768px) {
+      header {
+        display: grid !important;
+        grid-template-columns: 44px 1fr 44px;
+        grid-template-rows: auto auto;
+        align-items: center;
+        padding: 12px 16px;
+        gap: 0 8px;
+      }
+      .menu-toggle { display: inline-flex !important; grid-column: 1; grid-row: 1; }
+      .nav-logo-center { grid-column: 2; grid-row: 1; display: flex; justify-content: center; align-items: center; }
+      .nav-user-right { grid-column: 3; grid-row: 1; display: flex; justify-content: flex-end; align-items: center; }
+      nav { display: none !important; grid-column: 1 / -1; grid-row: 2; flex-direction: column; align-items: stretch; gap: 6px; padding: 10px; border-radius: 14px; background: rgba(8,27,51,0.96); margin-top: 8px; width: 100%; }
+      nav.open { display: flex !important; }
+      nav a { padding: 10px 12px; border-radius: 10px; }
+      nav a:hover, nav a.active { background: rgba(255,255,255,0.12); }
+      nav .user-menu { display: none !important; }
+      .brand-tag { display: none; }
+      .logo-icon { width: 42px !important; height: 42px !important; }
+      .logo-text strong { font-size: 17px !important; }
+    }
+
     @media (max-width: 860px) {
       header {
         padding: 16px 20px;
@@ -625,7 +666,9 @@
 <body>
   <div class="page">
     <header>
-      <div class="brand-group">
+      <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false"><span></span><span></span><span></span></button>
+      <div class="nav-logo-center">
+        <div class="brand-group">
         <div class="logo-mark" aria-label="AeroQuest Travels logo">
           <svg class="logo-icon" viewBox="0 0 64 64" aria-hidden="true">
             <defs>
@@ -643,7 +686,16 @@
             <span>Travels</span>
           </div>
         </div>
-        <div class="brand-tag">Explore beyond the limits</div>
+        </div>
+      </div>
+      <div class="nav-user-right">
+        <div class="user-menu">
+          <button class="user-initial" type="button" aria-label="Open account menu"></button>
+          <div class="user-dropdown">
+            <button type="button" class="settings-btn">Settings</button>
+            <button type="button" class="logout-btn">Logout</button>
+          </div>
+        </div>
       </div>
       <nav>
         <a href="homepage.html">Home</a>
@@ -843,15 +895,24 @@
     </footer>
   </div>
   <script>
-    const savedEmail = localStorage.getItem("aeroquestUserEmail");
-    const userInitial = document.querySelector(".user-initial");
-
-    if (savedEmail && userInitial) {
-      userInitial.textContent = savedEmail.trim().charAt(0);
-      userInitial.title = savedEmail;
-      userInitial.classList.add("show");
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navMenu = document.querySelector('nav');
+    if (menuToggle && navMenu) {
+      menuToggle.addEventListener('click', () => {
+        const isOpen = navMenu.classList.toggle('open');
+        menuToggle.classList.toggle('open', isOpen);
+        menuToggle.setAttribute('aria-expanded', String(isOpen));
+      });
+      navMenu.querySelectorAll('a').forEach(l => l.addEventListener('click', () => {
+        navMenu.classList.remove('open'); menuToggle.classList.remove('open'); menuToggle.setAttribute('aria-expanded','false');
+      }));
     }
-
+    const savedEmail = localStorage.getItem("aeroquestUserEmail");
+    const savedName = localStorage.getItem("aeroquestUserName");
+    const initial = savedName ? savedName.trim().charAt(0).toUpperCase() : (savedEmail ? savedEmail.trim().charAt(0).toUpperCase() : '');
+    document.querySelectorAll(".user-initial").forEach(el => {
+      if (savedEmail) { el.textContent = initial; el.title = savedName || savedEmail; el.classList.add("show"); }
+    });
     const userMenuButton = document.querySelector(".user-initial");
     const userDropdown = document.querySelector(".user-dropdown");
     const settingsButton = document.querySelector(".settings-btn");

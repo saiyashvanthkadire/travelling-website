@@ -4,450 +4,512 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AeroQuest Login & Sign Up</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
+    *, *::before, *::after {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+
+    :root {
+      --gold: #ffdd00;
+      --orange: #ff9f1c;
+      --navy: #14213d;
+      --card-bg: rgba(10, 20, 50, 0.55);
+      --input-bg: rgba(255, 255, 255, 0.07);
+      --border: rgba(255, 255, 255, 0.15);
     }
 
     body {
       min-height: 100vh;
+      font-family: 'Inter', Arial, sans-serif;
       background:
-        linear-gradient(rgba(8, 20, 42, 0.62), rgba(8, 20, 42, 0.78)),
-        url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80") center/cover no-repeat;
-      color: #ffffff;
-    }
-
-    .brand-mark {
-      position: fixed;
-      top: 24px;
-      left: 28px;
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
+        linear-gradient(135deg, rgba(5, 12, 35, 0.85) 0%, rgba(10, 30, 70, 0.80) 100%),
+        url("https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1800&q=80") center/cover no-repeat fixed;
       color: #fff;
-      text-decoration: none;
-      z-index: 2;
+      overflow-x: hidden;
     }
 
-    .brand-mark span {
-      font-size: 13px;
-      letter-spacing: 0.8px;
-      color: #dceeff;
+    /* ── Animated particles ── */
+    .particles {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+    }
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 221, 0, 0.18);
+      animation: float linear infinite;
+    }
+    @keyframes float {
+      0%   { transform: translateY(110vh) scale(0); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 0.6; }
+      100% { transform: translateY(-10vh) scale(1); opacity: 0; }
     }
 
-    .logo-mark {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
+    /* ── Brand ── */
+    .brand-mark {
+      position: fixed; top: 22px; left: 24px;
+      display: inline-flex; align-items: center; gap: 11px;
+      text-decoration: none; z-index: 10;
     }
+    .logo-icon { width: 52px; height: 52px; flex-shrink: 0; filter: drop-shadow(0 0 10px rgba(76,201,240,0.5)); }
+    .logo-text { display: flex; flex-direction: column; line-height: 1; }
+    .logo-text strong { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: 0.3px; }
+    .logo-text span   { font-size: 10px; text-transform: uppercase; letter-spacing: 2.5px; color: var(--gold); margin-top: 3px; }
 
-    .logo-icon {
-      width: 58px;
-      height: 58px;
-      flex-shrink: 0;
-    }
-
-    .logo-text {
-      display: flex;
-      flex-direction: column;
-      line-height: 1;
-    }
-
-    .logo-text strong {
-      font-size: 24px;
-      color: #ffffff;
-      letter-spacing: 0.4px;
-    }
-
-    .logo-text span {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: #ffdd00;
-      margin-top: 4px;
-    }
-
+    /* ── Layout ── */
     .page {
+      position: relative; z-index: 1;
       min-height: 100vh;
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
+      grid-template-columns: 1.15fr 0.85fr;
       align-items: center;
-      gap: 40px;
-      padding: 100px 50px 50px;
+      gap: 48px;
+      padding: 110px 60px 60px;
     }
 
-    .intro {
-      max-width: 560px;
-    }
+    /* ── Intro ── */
+    .intro { max-width: 580px; }
 
     .tag {
-      display: inline-block;
-      padding: 8px 16px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.14);
-      margin-bottom: 18px;
-      letter-spacing: 1px;
-      font-size: 13px;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 7px 16px; border-radius: 999px;
+      background: rgba(255,221,0,0.12);
+      border: 1px solid rgba(255,221,0,0.3);
+      font-size: 11px; font-weight: 600; letter-spacing: 1.8px;
+      color: var(--gold); margin-bottom: 22px; text-transform: uppercase;
     }
+    .tag::before { content: "✈"; font-size: 13px; }
 
     .intro h1 {
-      font-size: 56px;
-      line-height: 1.1;
-      margin-bottom: 18px;
+      font-size: clamp(36px, 4.5vw, 58px);
+      font-weight: 800; line-height: 1.1; margin-bottom: 20px;
+      background: linear-gradient(135deg, #ffffff 40%, #a8d4ff);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
 
     .intro p {
-      font-size: 18px;
-      line-height: 1.7;
-      color: #e8eefc;
-      max-width: 500px;
+      font-size: clamp(15px, 1.6vw, 18px);
+      line-height: 1.75; color: #b8cef0; max-width: 480px;
     }
 
+    .intro-stats {
+      display: flex; gap: 32px; margin-top: 36px;
+    }
+    .stat { display: flex; flex-direction: column; gap: 4px; }
+    .stat strong { font-size: 26px; font-weight: 800; color: var(--gold); }
+    .stat span   { font-size: 12px; color: #8aa4cc; letter-spacing: 0.5px; }
+
+    /* ── Card ── */
     .card {
-      width: 100%;
-      max-width: 430px;
-      margin-left: auto;
-      background: rgba(255, 255, 255, 0.14);
-      backdrop-filter: blur(18px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      width: 100%; max-width: 440px; margin-left: auto;
+      background: var(--card-bg);
+      backdrop-filter: blur(28px) saturate(160%);
+      -webkit-backdrop-filter: blur(28px) saturate(160%);
+      border: 1px solid var(--border);
       border-radius: 28px;
-      padding: 34px 30px;
-      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.28);
+      padding: 36px 32px;
+      box-shadow:
+        0 30px 80px rgba(0,0,0,0.45),
+        0 0 0 1px rgba(255,255,255,0.06) inset,
+        0 1px 0 rgba(255,255,255,0.12) inset;
+      position: relative; overflow: hidden;
+    }
+    .card::before {
+      content: "";
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), var(--orange), transparent);
     }
 
-    .card h2 {
-      font-size: 32px;
-      margin-bottom: 10px;
-    }
-
-    .card p {
-      color: #e9f1ff;
-      margin-bottom: 24px;
-    }
-
+    /* ── Tabs ── */
     .auth-tabs {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      padding: 6px;
-      margin-bottom: 24px;
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.12);
-      border: 1px solid rgba(255, 255, 255, 0.16);
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 6px; padding: 5px;
+      margin-bottom: 26px; border-radius: 16px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
     }
-
     .tab-btn {
-      border: none;
-      border-radius: 13px;
-      padding: 12px 14px;
-      background: transparent;
-      color: #ffffff;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.25s ease, color 0.25s ease;
+      border: none; border-radius: 12px; padding: 11px 14px;
+      background: transparent; color: rgba(255,255,255,0.6);
+      font-size: 14px; font-weight: 600; font-family: inherit;
+      cursor: pointer; transition: all 0.25s ease; letter-spacing: 0.3px;
     }
-
     .tab-btn.active {
-      background: linear-gradient(135deg, #ffdd00, #ff9f1c);
-      color: #14213d;
+      background: linear-gradient(135deg, var(--gold), var(--orange));
+      color: var(--navy); box-shadow: 0 4px 14px rgba(255,190,11,0.35);
     }
 
-    .auth-panel {
-      display: none;
-    }
+    /* ── Panel ── */
+    .auth-panel { display: none; }
+    .auth-panel.active { display: block; }
 
-    .auth-panel.active {
-      display: block;
-    }
+    .panel-title { font-size: 26px; font-weight: 800; margin-bottom: 6px; }
+    .panel-sub   { font-size: 13px; color: #8aa4cc; margin-bottom: 24px; line-height: 1.5; }
 
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-
-    .field.full {
-      grid-column: 1 / -1;
-    }
-
-    .field {
-      margin-bottom: 18px;
-    }
+    /* ── Fields ── */
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .field.full { grid-column: 1 / -1; }
+    .field { margin-bottom: 16px; }
 
     .field label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 14px;
-      font-weight: bold;
+      display: block; margin-bottom: 7px;
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.6px; color: #a0b8d8; text-transform: uppercase;
     }
+
+    .input-wrap { position: relative; }
 
     .field input {
-      width: 100%;
-      padding: 14px 16px;
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      border-radius: 14px;
-      background: rgba(255, 255, 255, 0.12);
-      color: #fff;
-      font-size: 15px;
-      outline: none;
-    }
-
-    .field input::placeholder {
-      color: rgba(255, 255, 255, 0.72);
-    }
-
-    .options {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 22px;
-      font-size: 14px;
-    }
-
-    .options a,
-    .switch-link button {
-      color: #ffdd00;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .switch-link button {
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      font-size: inherit;
-      font-family: inherit;
-    }
-
-    .btn {
-      width: 100%;
-      border: none;
-      border-radius: 16px;
-      padding: 15px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      background: linear-gradient(135deg, #ffdd00, #ff9f1c);
-      color: #14213d;
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 24px rgba(255, 190, 11, 0.35);
-    }
-
-    .switch-link {
-      text-align: center;
-      margin-top: 18px;
-      font-size: 14px;
-    }
-
-    .flash-messages {
-      margin-bottom: 18px;
-    }
-
-    .flash {
-      padding: 12px 14px;
+      width: 100%; padding: 13px 16px;
+      border: 1px solid var(--border);
       border-radius: 12px;
-      margin-bottom: 10px;
-      font-size: 14px;
-      background: rgba(255, 255, 255, 0.16);
-      border: 1px solid rgba(255, 255, 255, 0.24);
+      background: var(--input-bg);
+      color: #fff; font-size: 14px; font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+    .field input::placeholder { color: rgba(255,255,255,0.3); }
+    .field input:focus {
+      border-color: rgba(255,221,0,0.6);
+      background: rgba(255,255,255,0.1);
+      box-shadow: 0 0 0 3px rgba(255,221,0,0.12);
     }
 
-    .flash.error {
-      background: rgba(255, 70, 70, 0.24);
-      border-color: rgba(255, 120, 120, 0.55);
+    .toggle-pw {
+      position: absolute; right: 13px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer;
+      color: rgba(255,255,255,0.4); font-size: 16px; padding: 2px;
+      transition: color 0.2s; line-height: 1;
+    }
+    .toggle-pw:hover { color: var(--gold); }
+
+    /* ── Options ── */
+    .options {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 20px; font-size: 13px;
+    }
+    .remember { display: flex; align-items: center; gap: 7px; cursor: pointer; color: #8aa4cc; }
+    .remember input[type="checkbox"] { accent-color: var(--gold); width: 15px; height: 15px; cursor: pointer; }
+    .options a { color: var(--gold); text-decoration: none; font-weight: 600; font-size: 13px; }
+    .options a:hover { text-decoration: underline; }
+
+    /* ── Button ── */
+    .btn {
+      width: 100%; border: none; border-radius: 14px;
+      padding: 14px; font-size: 15px; font-weight: 700;
+      font-family: inherit; cursor: pointer;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--orange) 100%);
+      color: var(--navy);
+      box-shadow: 0 6px 20px rgba(255,190,11,0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+      letter-spacing: 0.3px;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(255,190,11,0.45); }
+    .btn:active { transform: translateY(0); }
+
+    /* ── Divider ── */
+    .divider {
+      display: flex; align-items: center; gap: 12px;
+      margin: 20px 0; color: rgba(255,255,255,0.25); font-size: 12px;
+    }
+    .divider::before, .divider::after {
+      content: ""; flex: 1; height: 1px; background: var(--border);
     }
 
-    .flash.success {
-      background: rgba(25, 180, 120, 0.24);
-      border-color: rgba(90, 220, 165, 0.55);
+    /* ── Social ── */
+    .social-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 4px; }
+    .social-btn {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 11px 10px; border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.05);
+      color: #fff; font-size: 13px; font-weight: 500; font-family: inherit;
+      cursor: pointer; transition: background 0.2s, border-color 0.2s;
     }
+    .social-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
+    .social-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
 
-    @media (max-width: 900px) {
+    /* ── Switch link ── */
+    .switch-link { text-align: center; margin-top: 18px; font-size: 13px; color: #8aa4cc; }
+    .switch-link button {
+      border: none; background: transparent; cursor: pointer;
+      color: var(--gold); font-weight: 700; font-size: 13px; font-family: inherit;
+    }
+    .switch-link button:hover { text-decoration: underline; }
+
+    /* ── Flash ── */
+    .flash-messages { margin-bottom: 16px; }
+    .flash {
+      padding: 11px 14px; border-radius: 10px; margin-bottom: 8px;
+      font-size: 13px; background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .flash.error   { background: rgba(255,70,70,0.2);   border-color: rgba(255,120,120,0.5); }
+    .flash.success { background: rgba(25,180,120,0.2);  border-color: rgba(90,220,165,0.5); }
+
+    /* ════════════════════════════════
+       RESPONSIVE
+    ════════════════════════════════ */
+
+    /* Tablet */
+    @media (max-width: 960px) {
       .page {
         grid-template-columns: 1fr;
-        padding: 30px 20px 40px;
+        padding: 90px 24px 40px;
+        gap: 32px;
       }
-
-      .intro h1 {
-        font-size: 40px;
-      }
-
-      .card {
-        margin: 0;
-      }
-
-      .brand-mark {
-        top: 18px;
-        left: 18px;
-      }
+      .intro { max-width: 100%; text-align: center; }
+      .intro p { max-width: 100%; }
+      .tag { margin: 0 auto 20px; }
+      .intro-stats { justify-content: center; }
+      .card { max-width: 100%; margin: 0; }
     }
 
-    @media (max-width: 520px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
+    /* Mobile */
+    @media (max-width: 600px) {
+      .brand-mark { top: 16px; left: 16px; }
+      .logo-icon  { width: 42px; height: 42px; }
+      .logo-text strong { font-size: 18px; }
 
-      .card {
-        padding: 28px 22px;
-      }
+      .page { padding: 80px 16px 32px; gap: 24px; }
+
+      /* Hide intro on small phones, keep card prominent */
+      .intro { display: none; }
+
+      .card { padding: 28px 20px; border-radius: 22px; }
+      .panel-title { font-size: 22px; }
+
+      .grid { grid-template-columns: 1fr; }
+      .field.full { grid-column: 1; }
+
+      .social-row { grid-template-columns: 1fr; }
+
+      .options { flex-direction: column; align-items: flex-start; gap: 10px; }
+
+      .btn { padding: 15px; font-size: 16px; }
+    }
+
+    /* Very small phones */
+    @media (max-width: 360px) {
+      .card { padding: 22px 16px; }
+      .auth-tabs { gap: 4px; padding: 4px; }
+      .tab-btn { padding: 10px 8px; font-size: 13px; }
     }
   </style>
 </head>
 <body>
-  <a class="brand-mark" href="homepage.html">
-    <div class="logo-mark" aria-label="AeroQuest Travels logo">
-      <svg class="logo-icon" viewBox="0 0 64 64" aria-hidden="true">
-        <defs>
-          <linearGradient id="aqLoginLogo" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#4cc9f0"></stop>
-            <stop offset="100%" stop-color="#0d6efd"></stop>
-          </linearGradient>
-        </defs>
-        <circle cx="32" cy="32" r="30" fill="url(#aqLoginLogo)"></circle>
-        <path d="M32 14c-7.5 0-13.5 5.8-13.5 13.1 0 10.1 13.5 22.9 13.5 22.9S45.5 37.2 45.5 27.1C45.5 19.8 39.5 14 32 14zm0 17.6a4.8 4.8 0 1 1 0-9.6 4.8 4.8 0 0 1 0 9.6z" fill="#ffffff"></path>
-        <path d="M17 25l15.5 4.1 8.6-7.5c1.3-1.1 3.2.5 2.2 1.9l-6.5 8.9 3.7 13.6c.3 1.2-1.2 2-2 1.1l-7.1-8.1-8.8 2.1c-1.2.3-2-.9-1.2-1.8l5.4-6.3-9.2-5.5c-1.1-.7-.7-2.5.6-2.4z" fill="#ffd166"></path>
-      </svg>
-      <div class="logo-text">
-        <strong>AeroQuest</strong>
-        <span>Travels</span>
-      </div>
+
+  <!-- Floating particles -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Brand -->
+  <a class="brand-mark" href="homepage.html" aria-label="AeroQuest Home">
+    <svg class="logo-icon" viewBox="0 0 64 64" aria-hidden="true">
+      <defs>
+        <linearGradient id="aqLg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#4cc9f0"/>
+          <stop offset="100%" stop-color="#0d6efd"/>
+        </linearGradient>
+      </defs>
+      <circle cx="32" cy="32" r="30" fill="url(#aqLg)"/>
+      <path d="M32 14c-7.5 0-13.5 5.8-13.5 13.1 0 10.1 13.5 22.9 13.5 22.9S45.5 37.2 45.5 27.1C45.5 19.8 39.5 14 32 14zm0 17.6a4.8 4.8 0 1 1 0-9.6 4.8 4.8 0 0 1 0 9.6z" fill="#fff"/>
+      <path d="M17 25l15.5 4.1 8.6-7.5c1.3-1.1 3.2.5 2.2 1.9l-6.5 8.9 3.7 13.6c.3 1.2-1.2 2-2 1.1l-7.1-8.1-8.8 2.1c-1.2.3-2-.9-1.2-1.8l5.4-6.3-9.2-5.5c-1.1-.7-.7-2.5.6-2.4z" fill="#ffd166"/>
+    </svg>
+    <div class="logo-text">
+      <strong>AeroQuest</strong>
+      <span>Travels</span>
     </div>
   </a>
 
   <main class="page">
+
+    <!-- Intro -->
     <section class="intro">
-      <span class="tag">AEROQUEST MEMBER ACCESS</span>
+      <span class="tag">AeroQuest Member Access</span>
       <h1 id="intro-title">Step back into your next unforgettable journey.</h1>
       <p id="intro-copy">Log in to manage bookings, save dream destinations, and keep every travel plan in one smooth place.</p>
+      <div class="intro-stats">
+        <div class="stat"><strong>120+</strong><span>Destinations</span></div>
+        <div class="stat"><strong>50K+</strong><span>Happy Travellers</span></div>
+        <div class="stat"><strong>4.9★</strong><span>Avg Rating</span></div>
+      </div>
     </section>
 
+    <!-- Card -->
     <section class="card">
-      {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-          <div class="flash-messages">
-            {% for category, message in messages %}
-              <div class="flash {{ category }}">{{ message }}</div>
-            {% endfor %}
-          </div>
-        {% endif %}
-      {% endwith %}
 
-      <div class="auth-tabs" aria-label="Choose login or signup form">
+      
+
+      <div class="auth-tabs" aria-label="Login or Sign Up">
         <button class="tab-btn active" type="button" data-panel="login">Log In</button>
         <button class="tab-btn" type="button" data-panel="signup">Sign Up</button>
       </div>
 
+      <!-- Login Panel -->
       <div class="auth-panel active" id="login-panel">
-        <h2>Welcome back</h2>
-        <p>Enter your account details and continue your travel story.</p>
-        <form action="{{ url_for('login') }}" method="post" class="auth-form">
+        <p class="panel-title">Welcome back 👋</p>
+        <p class="panel-sub">Enter your details to continue your travel story.</p>
+
+        <form action="{{ url_for('login') }}" method="post" class="auth-form" id="login-form">
           <div class="field">
             <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" placeholder="name@example.com" required>
+            <input type="email" id="email" name="email" placeholder="name@example.com" required autocomplete="email">
           </div>
 
           <div class="field">
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            <div class="input-wrap">
+              <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="current-password">
+              <button type="button" class="toggle-pw" aria-label="Toggle password visibility" data-target="password">👁</button>
+            </div>
           </div>
 
           <div class="options">
-            <span>Remember me</span>
+            <label class="remember">
+              <input type="checkbox" name="remember"> Remember me
+            </label>
             <a href="#">Forgot password?</a>
           </div>
 
-          <button type="submit" class="btn">Log In</button>
+          <button type="submit" class="btn">Log In →</button>
         </form>
+        <script>
+          document.getElementById("login-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+            window.location.href = "homepage.html";
+          });
+        </script>
+
+        <div class="divider">or continue with</div>
+        <div class="social-row">
+          <button class="social-btn" type="button">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+            Google
+          </button>
+          <button class="social-btn" type="button">
+            <svg viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            Facebook
+          </button>
+        </div>
+
         <p class="switch-link">New here? <button type="button" data-panel="signup">Create an account</button></p>
       </div>
 
+      <!-- Signup Panel -->
       <div class="auth-panel" id="signup-panel">
-        <h2>Create account</h2>
-        <p>Join AeroQuest and start planning smarter, faster, and more beautifully.</p>
-        <form action="{{ url_for('signup') }}" method="post" class="auth-form">
+        <p class="panel-title">Create account 🚀</p>
+        <p class="panel-sub">Join AeroQuest and start planning smarter, faster, beautifully.</p>
+
+        <form action="{{ url_for('signup') }}" method="post" class="auth-form" id="signup-form">
           <div class="grid">
             <div class="field">
               <label for="first-name">First Name</label>
-              <input type="text" id="first-name" name="first_name" placeholder="First name" required>
+              <input type="text" id="first-name" name="first_name" placeholder="First name" required autocomplete="given-name">
             </div>
-
             <div class="field">
               <label for="last-name">Last Name</label>
-              <input type="text" id="last-name" name="last_name" placeholder="Last name" required>
+              <input type="text" id="last-name" name="last_name" placeholder="Last name" required autocomplete="family-name">
             </div>
-
             <div class="field full">
               <label for="signup-email">Email Address</label>
-              <input type="email" id="signup-email" name="email" placeholder="name@example.com" required>
+              <input type="email" id="signup-email" name="email" placeholder="name@example.com" required autocomplete="email">
             </div>
-
             <div class="field">
               <label for="signup-password">Password</label>
-              <input type="password" id="signup-password" name="password" placeholder="Create password" required>
+              <div class="input-wrap">
+                <input type="password" id="signup-password" name="password" placeholder="Create password" required autocomplete="new-password">
+                <button type="button" class="toggle-pw" aria-label="Toggle password" data-target="signup-password">👁</button>
+              </div>
             </div>
-
             <div class="field">
               <label for="confirm-password">Confirm Password</label>
-              <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm password" required>
+              <div class="input-wrap">
+                <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm password" required autocomplete="new-password">
+                <button type="button" class="toggle-pw" aria-label="Toggle password" data-target="confirm-password">👁</button>
+              </div>
             </div>
           </div>
 
-          <button type="submit" class="btn">Sign Up</button>
+          <button type="submit" class="btn">Create Account →</button>
         </form>
+        <script>
+          document.getElementById("signup-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+            window.location.href = "login.html";
+          });
+        </script>
+
         <p class="switch-link">Already have an account? <button type="button" data-panel="login">Log in</button></p>
       </div>
+
     </section>
   </main>
 
   <script>
-    const tabButtons = document.querySelectorAll("[data-panel]");
-    const loginPanel = document.getElementById("login-panel");
-    const signupPanel = document.getElementById("signup-panel");
-    const introTitle = document.getElementById("intro-title");
-    const introCopy = document.getElementById("intro-copy");
-
-    function showPanel(panelName) {
-      const isSignup = panelName === "signup";
-
-      loginPanel.classList.toggle("active", !isSignup);
-      signupPanel.classList.toggle("active", isSignup);
-
-      document.querySelectorAll(".tab-btn").forEach((button) => {
-        button.classList.toggle("active", button.dataset.panel === panelName);
-      });
-
-      introTitle.textContent = isSignup
-        ? "Build your own travel world in one account."
-        : "Step back into your next unforgettable journey.";
-      introCopy.textContent = isSignup
-        ? "Sign up to track bookings, save favorite packages, and unlock a smoother experience from inspiration to departure."
-        : "Log in to manage bookings, save dream destinations, and keep every travel plan in one smooth place.";
+    /* ── Particles ── */
+    const container = document.getElementById("particles");
+    for (let i = 0; i < 18; i++) {
+      const p = document.createElement("div");
+      p.className = "particle";
+      const size = Math.random() * 6 + 3;
+      p.style.cssText = `
+        width:${size}px; height:${size}px;
+        left:${Math.random() * 100}%;
+        animation-duration:${Math.random() * 14 + 10}s;
+        animation-delay:${Math.random() * 10}s;
+        opacity:${Math.random() * 0.5 + 0.1};
+      `;
+      container.appendChild(p);
     }
 
-    tabButtons.forEach((button) => {
-      button.addEventListener("click", () => showPanel(button.dataset.panel));
+    /* ── Tabs ── */
+    const loginPanel  = document.getElementById("login-panel");
+    const signupPanel = document.getElementById("signup-panel");
+    const introTitle  = document.getElementById("intro-title");
+    const introCopy   = document.getElementById("intro-copy");
+
+    function showPanel(name) {
+      const isSignup = name === "signup";
+      loginPanel.classList.toggle("active", !isSignup);
+      signupPanel.classList.toggle("active", isSignup);
+      document.querySelectorAll(".tab-btn").forEach(b =>
+        b.classList.toggle("active", b.dataset.panel === name)
+      );
+      if (introTitle) {
+        introTitle.textContent = isSignup
+          ? "Build your own travel world in one account."
+          : "Step back into your next unforgettable journey.";
+        introCopy.textContent = isSignup
+          ? "Sign up to track bookings, save favourite packages, and unlock a smoother experience from inspiration to departure."
+          : "Log in to manage bookings, save dream destinations, and keep every travel plan in one smooth place.";
+      }
+    }
+
+    document.querySelectorAll("[data-panel]").forEach(btn =>
+      btn.addEventListener("click", () => showPanel(btn.dataset.panel))
+    );
+
+    /* ── Password toggle ── */
+    document.querySelectorAll(".toggle-pw").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const input = document.getElementById(btn.dataset.target);
+        input.type = input.type === "password" ? "text" : "password";
+        btn.textContent = input.type === "password" ? "👁" : "🙈";
+      });
     });
 
-    document.querySelectorAll(".auth-form").forEach((form) => {
+    /* ── Save user info on submit ── */
+    document.querySelectorAll(".auth-form").forEach(form => {
       form.addEventListener("submit", () => {
         const emailInput = form.querySelector('input[type="email"]');
-
-        if (emailInput && emailInput.value.trim()) {
+        if (emailInput?.value.trim()) {
           const email = emailInput.value.trim();
-          const firstName = form.querySelector("#first-name")?.value.trim();
-          const lastName = form.querySelector("#last-name")?.value.trim();
-          const displayName = [firstName, lastName].filter(Boolean).join(" ") || email.split("@")[0];
-
+          const fn = form.querySelector("#first-name")?.value.trim();
+          const ln = form.querySelector("#last-name")?.value.trim();
           localStorage.setItem("aeroquestUserEmail", email);
-          localStorage.setItem("aeroquestUserName", displayName);
+          localStorage.setItem("aeroquestUserName", [fn, ln].filter(Boolean).join(" ") || email.split("@")[0]);
         }
       });
     });
