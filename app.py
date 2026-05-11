@@ -16,7 +16,7 @@ app.secret_key = "change-this-secret-key"
 DB_CONFIG = {
     "host": "localhost",
     "user": "root",
-    "password": "kadire_sai",
+    "password": "add-your-password",
     "database": "aeroquest",
 }
 
